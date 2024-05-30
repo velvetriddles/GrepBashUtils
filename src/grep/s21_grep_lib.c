@@ -110,6 +110,7 @@ void reg_compile(char** argv, char* my_reg, FILE* fp, struct flags flag,
             err_msg);
     exit(3);
   }
+
   while (feof(fp) == 0) {
     if (fgets(str, BUFFER, fp)) {
       int new_line_o_counter = 1;
@@ -144,17 +145,14 @@ void reg_compile(char** argv, char* my_reg, FILE* fp, struct flags flag,
       n_line++;
     }
   }
-  if (flag.c != 0) {
+  if (flag.l && lines_count > 0) {
+    printf("%s\n", argv[optind]);
+  } else if (flag.c != 0) {
     if (files_count > 1 && !flag.h) {
       printf("%s:", argv[optind]);
     }
-    if (flag.l && lines_count)
-      printf("1\n");
-    else
-      printf("%d\n", lines_count);
+    printf("%d\n", lines_count);
   }
-  if (flag.l && lines_count) {
-    printf("%s\n", argv[optind]);
-  }
+
   regfree(&pattern);
 }
