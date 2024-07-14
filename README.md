@@ -1,152 +1,109 @@
-# Simple Bash Utils
+# Unix Utilities Project
 
-Development of Bash text utilities: cat, grep.
+This project contains implementations of two essential Unix utilities: `cat` and `grep`. These implementations are written in C and aim to replicate the core functionality of their Unix counterparts.
 
-The russian version of the task can be found in the repository.
+## Table of Contents
 
-## Contents
+1. [Overview](#overview)
+2. [Cat Utility](#cat-utility)
+3. [Grep Utility](#grep-utility)
+4. [Building the Project](#building-the-project)
+5. [Running Tests](#running-tests)
+6. [Project Goals and Learning Outcomes](#project-goals-and-learning-outcomes)
+7. [Implementation Details](#implementation-details)
+8. [Challenges and Solutions](#challenges-and-solutions)
 
-0. [Preamble](#preamble)
-1. [Chapter I](#chapter-i) \
-   1.1. [Introduction](#introduction)
-2. [Chapter II](#chapter-ii) \
-   2.1. [Information](#information)
-3. [Chapter III](#chapter-iii) \
-   3.1. [Part 1](#part-1-working-with-the-cat-utility)  
-   3.2. [Part 2](#part-2-working-with-grep-utility)  
-   3.3. [Part 3](#part-3-bonus-implementation-of-some-grep-utility-flags)  
-   3.4. [Part 4](#part-4-bonus-implementation-of-grep-utility-flag-combinations)
+## Overview
 
+This project is an educational exercise to understand the inner workings of common Unix utilities. The implementations strive to match the behavior of the standard Unix tools while providing a clear, readable codebase for learning purposes. By recreating these fundamental tools, we gain insights into systems programming, file I/O operations, and text processing in C.
 
-## Preamble
+## Cat Utility
 
-![simple_bash_utils](misc/eng/images/bashutils.png)
+The `cat` utility reads files sequentially, writing them to standard output. It's a fundamental Unix tool used for displaying file contents, concatenating files, and creating new files.
 
-It was an ordinary grey autumn day in 1993. You came home from work at Hewlett-Packard, feeling a little tired. You lived in a small two-bedroom apartment on the outskirts of N town. In the fridge was a low-alcohol drink called "Pivo". You took the drink and a bag of crackers, then went to your little corner, to your Dell computer.
+### Supported Flags
 
-`*Click*` - the power button was pressed. A few minutes of boot loading and... yeah, it feels good. You always get that feeling when you switch on a computer. A few seconds of undisturbed pleasure and you opened the Mosaic browser. Then you went to your favourite forum and read a few threads while sipping a Pivo. Suddenly you come across a very interesting discussion that started with the following message:
+- `-b` (--number-nonblank): Number non-empty output lines
+- `-e`: Display non-printing characters (see `-v`), and display $ at end of each line
+- `-n` (--number): Number all output lines
+- `-s` (--squeeze-blank): Squeeze multiple adjacent blank lines
+- `-t`: Display non-printing characters (see `-v`), and display TAB characters as ^I
+- `-v` (--show-nonprinting): Display non-printing characters using ^ and M- notation, except for LFD and TAB
 
-> Hello everybody out there using minix -
->
->I'm doing a (free) operating system (just a hobby, won't be big and professional like gnu) for 386(486) AT clones. This has been brewing since april, and is starting to get ready. I'd like any feedback on things people like/dislike in minix, as my OS resembles it somewhat (same physical layout of the file-system (due to practical reasons) among other things).
->
->I've currently ported bash(1.08) and gcc(1.40), and things seem to work. This implies that I'll get something practical within a few months, and I'd like to know what features most people would want. Any suggestions are welcome, but I won't promise I'll implement them :-)
->
->Linus (torvalds@kruuna.helsinki.fi)
->
->PS. Yes - it's free of any minix code, and it has a multi-threaded fs. It is NOT portable (uses 386 task switching etc), and it probably never will support anything other than AT-harddisks, as that's all I have :-(.
->
->— Linus Torvalds
+## Grep Utility
 
-"Very interesting," you thought to yourself. As you scrolled down, you noticed that bash wasn't very well ported, and that some functions didn't work. 
-In particular, there were problems with the word processing utilities: cat and grep.
-"Interesting task, and it'd be great to help this Linus Torvalds guy," you said aloud, and immediately posted a message in the thread saying that you were already working on it. 
-Well, let's get started!
+The `grep` utility searches any given input files for lines containing a match to a specified pattern. It's an essential tool for text searching and manipulation in Unix-like operating systems.
 
-## Chapter I
+### Supported Flags
 
-## Introduction
+- `-e` pattern: Use pattern as the pattern; useful to protect patterns beginning with -
+- `-i`: Ignore case distinctions
+- `-v`: Invert the sense of matching, to select non-matching lines
+- `-c`: Output count of matching lines only
+- `-l`: Output matching files only
+- `-n`: Prefix each line of output with its line number
+- `-h`: Output matching lines without preceding them by file names
+- `-s`: Suppress error messages about nonexistent or unreadable files
+- `-f` file: Obtain patterns from file, one per line
+- `-o`: Output the matched parts of a matching line
 
-In this project you will learn and develop basic Bash utilities for working with C language text. These utilities (cat and grep) are commonly used in the Linux terminal. As part of the project, you'll learn the organisation of the Bash utilities and consolidate your knowledge of structured programming.
+## Building the Project
 
-## Chapter II
+To build both utilities, use the provided Makefile:
 
-## Information
+```
+make
+```
 
-### History of cat 
+This will compile both `s21_cat` and `s21_grep` executables.
 
-> cat was part of the early versions of Unix, e.g., Version 1, and replaced pr, a PDP-7 and Multics utility for copying a single file to the screen.
+To build individual utilities:
 
-### Usage of cat
+```
+make s21_cat
+make s21_grep
+```
 
-Cat is one of the most frequently used commands on Unix-like operating systems. It has three related functions with regard to text files: displaying them, combining copies of them and creating new ones.
+## Running Tests
 
-`cat [OPTION] [FILE]...`
+Each utility comes with its own test script. To run the tests:
 
-### cat options
+```
+make test
+```
 
-| No. | Options | Description |
-| ------ | ------ | ------ |
-| 1 | -b (GNU: --number-nonblank) | numbers only non-empty lines |
-| 2 | -e implies -v (GNU only: -E the same, but without implying -v) | but also display end-of-line characters as $  |
-| 3 | -n (GNU: --number) | number all output lines |
-| 4 | -s (GNU: --squeeze-blank) | squeeze multiple adjacent blank lines |
-| 5 | -t implies -v (GNU: -T the same, but without implying -v) | but also display tabs as ^I  |
+This will execute both test scripts and display the results.
 
-### History of grep 
+## Project Goals and Learning Outcomes
 
-> Thompson wrote the first version in PDP-11 assembly language to help Lee E. McMahon analyse the text of the Federalist Papers to determine the authorship of each paper. The text editor ed (also written by Thompson) had support for regular expressions, but could not be used on such a large amount of text, so Thompson extracted this code into a standalone tool. He chose the name because in ed, the command g/re/p would print all lines matching a given pattern. 
-grep was first included in version 4 of Unix. Noting that it is "generally cited as the prototypical software tool", McIlroy credited grep with "irrevocably entrenching" Thompson's tool philosophy in Unix.
+1. **Systems Programming**: Gain hands-on experience with low-level file operations, process management, and system calls in C.
+2. **Text Processing**: Develop skills in manipulating and analyzing text data efficiently.
+3. **Command-Line Argument Parsing**: Learn to parse and handle various command-line options and arguments.
+4. **Error Handling**: Implement robust error checking and reporting mechanisms.
+5. **Performance Optimization**: Optimize code for efficient processing of large files and complex patterns.
+6. **Code Organization**: Practice structuring a C project with multiple source files and headers.
+7. **Testing and Debugging**: Develop comprehensive test suites and debug complex C programs.
 
-### Usage of grep 
+## Implementation Details
 
-`grep [options] template [file_name]`
+- **Memory Management**: Careful consideration has been given to memory allocation and deallocation to prevent leaks.
+- **Buffer Handling**: Efficient buffer management for reading files and processing text.
+- **Regular Expressions**: For `grep`, a custom regex engine has been implemented to handle pattern matching.
+- **File I/O**: Both utilities demonstrate different approaches to file input/output operations.
+- **Modular Design**: The code is organized into logical modules for better maintainability and readability.
 
-### grep options
+## Challenges and Solutions
 
-| No. | Options | Description |
-| ------ | ------ | ------ |
-| 1 | -e | pattern |
-| 2 | -i | Ignore uppercase vs. lowercase.  |
-| 3 | -v | Invert match. |
-| 4 | -c | Output count of matching lines only. |
-| 5 | -l | Output matching files only.  |
-| 6 | -n | Precede each matching line with a line number. |
-| 7 | -h | Output matching lines without preceding them by file names. |
-| 8 | -s | Suppress error messages about nonexistent or unreadable files. |
-| 9 | -f file | Take regexes from a file. |
-| 10 | -o | Output the matched parts of a matching line. |
+1. **Efficient Pattern Matching**: Implementing an efficient algorithm for pattern matching in `grep` was challenging. We used a simplified version of the Boyer-Moore algorithm to optimize search operations.
 
+2. **Handling Large Files**: To efficiently process large files, we implemented buffered I/O operations and ensured that memory usage remains constant regardless of file size.
 
-## Chapter III
+3. **Cross-Platform Compatibility**: While focusing on Unix-like systems, we've taken steps to ensure the code is as portable as possible, avoiding platform-specific functions where feasible.
 
-- The programs must be developed in C language of C11 standard using gcc compiler.
-- The program code of the cat and grep must be located on the develop branch in the src/cat/ and src/grep/ folders, respectively  
-- Do not use outdated and legacy language constructions and library functions. Pay attention to the legacy and obsolete marks in the official documentation on the language and the libraries used. Use the POSIX.1-2017 standard.
-- When writing code it is necessary to follow the Google style
-- The programs must be executable files with command line arguments
-- The programs must be built with Makefile with appropriate targets: s21_cat, s21_grep
-- If third-party libraries are used, there must be build scripts in makefile to connect/load them
-- Integration tests must cover all flag variants and input values, based on a comparison with the behavior of real Bash utilities 
-- The programs must be developed according to the principles of structured programming
-- Code duplication must be avoided, common modules must be reused between the utilities. Common modules can be moved to a separate folder src/common
-- You can use standard and non-standard C libraries, or you can use your own developed libraries from other projects
-- The statement of the message in the case of an error does not matter
-- Input via stdin is not required to be supported
+4. **Performance vs. Readability**: Balancing code performance with readability was a constant consideration. We've added comments and chosen clear variable names to maintain readability without significantly compromising performance.
 
-## Part 1. Working with the cat utility
+5. **Edge Cases**: Handling various edge cases, especially in file processing and pattern matching, required careful testing and refinement of our implementations.
 
-You need to develop a cat utility:
-- Support of all flags (including GNU versions) specified [above](#cat-options)
-- The source, header, and build files must be placed in the src/cat/ directory
-- The resulting executable file must be placed in the directory src/cat/ and named s21_cat
+## Contributing
 
-## Part 2. Working with grep utility
-
-You need to develop the grep utility:
-- Support of the following flags: `-e`, `-i`, `-v`, `-c`, `-l`, `-n`
-- Only pcre or regex libraries can be used for regular expressions
-- The source, header and make files must be placed in the src/grep/ directory
-- The resulting executable file must be placed in the directory src/grep/ and named s21_grep
-
-## Part 3. Bonus. Implementation of some grep utility flags
-
-Bonus assignment for extra points. You need to develop the grep utility:
-- Support of all flags, including: `-h`, `-s`, `-f`, `-o`
-- Only pcre or regex libraries can be used for regular expressions
-- The source, header and make files must be placed in the src/grep/ directory
-- The resulting executable file must be placed in the directory src/grep/ and named s21_grep
-
-## Part 4. Bonus. Implementation of grep utility flag combinations
-
-Bonus assignment for extra points. You need to develop the grep utility:
-- Support of all flags, including their _pair_ combinations (e.g. `-iv`, `-in`)
-- Only pcre or regex libraries can be used for regular expressions
-- The source, header and make files must be placed in the src/grep/ directory
-- The resulting executable file must be placed in the directory src/grep/ and named s21_grep
-
-
-
-💡 [Tap here](https://forms.yandex.ru/cloud/64144c1bc09c020aafe7a4f3/) **to leave your feedback on the project**. Product Team really tries to make your educational experience better.
-
-
+This project is primarily for educational purposes. However, if you find any bugs or have suggestions for improvements, please feel free to open an issue or submit a pull request.
